@@ -1,4 +1,5 @@
 // src/App.jsx
+import './App.css';
 import { useState } from 'react';
 import ZombieFighter from './components/ZombieFighter/ZombieFighter';
 
@@ -87,20 +88,58 @@ const zombieFightersList = [
 
 
 const App = () => {
+  function handleAddFighter(fighter) {
+    if (money < fighter.price) {
+      // setPlentyOfMoney(false);
+      console.log('Not enough money');
+      return;
+    };
+    setMoney(money - fighter.price);
+    setTeam([...team, fighter]);
+    setZombieFighters(zombieFighters.filter(el => el.id !== fighter.id));
+  };
+
+  function handleRemoveFighter(fighter){
+    // setPlentyOfMoney(true);
+    setMoney(money + fighter.price);
+    setTeam(team.filter(el => el.id !== fighter.id));
+    setZombieFighters([...zombieFighters, fighter]);
+  };
+
   const [team, setTeam] = useState([]);
   const [money, setMoney] = useState(100);
-  const zombieFighters = useState(zombieFightersList);
-  function handleAddFighter(fighter) { };
+  const [zombieFighters, setZombieFighters] = useState(zombieFightersList);
+  const totalStrength = team.reduce((sum, fighter) => sum += fighter.strength, 0);
+  const totalAgility = team.reduce((sum, fighter) => sum += fighter.agility, 0);
+  // const [plentyOfMoney, setPlentyOfMoney] = useState(false);
+  const plentyOfMoney = (money >= Math.min(...zombieFighters.map(fighter => fighter.price)));
+  // console.log(Math.min(...zombieFighters.map(fighter => fighter.price)));
+
+  const redText = {color: 'red',};
+
   return (
     <div>
-      <h1>Hello world!</h1>
-      <ul>
-        {
-          zombieFightersList.map((fighter) => (
+      <h2>Team Strength: {totalStrength}</h2>
+      <h2>Team Agility: {totalAgility}</h2>
+      {(team.length === 0) ? <p>Pick some team members!</p> :
+        <ul>
+          {team.map((fighter) => (
+            <li key={fighter.id}>
               <ZombieFighter {...fighter} />
-              // <button type='button' onClick={() => handleAddFighter(fighter)}></button>
-          ))
-        }
+              <button type='button' onClick={() => handleRemoveFighter(fighter)}>Remove</button>
+            </li>
+          ))}
+        </ul>
+      }
+      <h2>Money: {money}</h2>
+      {(!plentyOfMoney) ? <p style={redText}>Not enough money!</p> : ''}
+      <ul>
+        {zombieFighters.map((fighter) => (
+          <li key={fighter.id}>
+            <ZombieFighter {...fighter} />
+            <button type='button' onClick={() => handleAddFighter(fighter)}>Add</button>
+          </li>
+        ))}
       </ul>
 
     </div>

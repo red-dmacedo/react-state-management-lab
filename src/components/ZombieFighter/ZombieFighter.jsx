@@ -1,15 +1,15 @@
 const ZombieFighter = (fighter) => {
-  const { id, image, name, price, strength, agility } = fighter;
+  const { img, name, price, strength, agility } = fighter;
   // console.log(fighter)
   // console.log('*')
   return (
-    <li key={id}>
-      <h3>Name: {name}</h3>
-      <p>Cost: {price}</p>
+    <>
+      <img src={img} alt={name} />
+      <h3>{name}</h3>
+      <p>Price: {price}</p>
       <p>Strength: {strength}</p>
       <p>Agility: {agility}</p>
-      <img src={image} alt="Zombie Fighter" />
-    </li>
+    </>
   );
 };
 
