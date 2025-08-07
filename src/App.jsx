@@ -90,17 +90,18 @@ const zombieFightersList = [
 const App = () => {
   function handleAddFighter(fighter) {
     if (money < fighter.price) {
-      // setPlentyOfMoney(false);
+      setPlentyOfMoney(false);
       console.log('Not enough money');
       return;
     };
+    setPlentyOfMoney(true);
     setMoney(money - fighter.price);
     setTeam([...team, fighter]);
     setZombieFighters(zombieFighters.filter(el => el.id !== fighter.id));
   };
 
-  function handleRemoveFighter(fighter){
-    // setPlentyOfMoney(true);
+  function handleRemoveFighter(fighter) {
+    setPlentyOfMoney(true);
     setMoney(money + fighter.price);
     setTeam(team.filter(el => el.id !== fighter.id));
     setZombieFighters([...zombieFighters, fighter]);
@@ -111,11 +112,9 @@ const App = () => {
   const [zombieFighters, setZombieFighters] = useState(zombieFightersList);
   const totalStrength = team.reduce((sum, fighter) => sum += fighter.strength, 0);
   const totalAgility = team.reduce((sum, fighter) => sum += fighter.agility, 0);
-  // const [plentyOfMoney, setPlentyOfMoney] = useState(false);
-  const plentyOfMoney = (money >= Math.min(...zombieFighters.map(fighter => fighter.price)));
-  // console.log(Math.min(...zombieFighters.map(fighter => fighter.price)));
+  const [plentyOfMoney, setPlentyOfMoney] = useState(true);
 
-  const redText = {color: 'red',};
+  const redText = { color: 'red', };
 
   return (
     <div>
